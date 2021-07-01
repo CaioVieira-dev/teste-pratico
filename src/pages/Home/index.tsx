@@ -1,21 +1,53 @@
 
 import { Module } from '../../components/Module'
 import { Classes } from '../../components/Classes'
+import { api } from '../../services/api'
+
 
 import './styles.scss'
+import { useEffect, useState } from 'react'
 
-const data = [
-    {
-        module: "Introdução e Preparatório",
-        classes: [{
-            name: "Iniciando como um programador(a) Devaria",
-            date: "21/06 às 19:30"
-        }],
-    },
 
-]
+
+type DataType = {
+    id: number,
+    module: string,
+    classes: {
+        name: string,
+        date: string
+    }[]
+}[] | undefined
 
 export function Home() {
+    const [isLoading, setIsLoading] = useState(true);
+    const [data, setData] = useState<DataType>();
+
+    useEffect(() => {
+
+        function getData() {
+            api.get('/api/modules-and-classes')
+                .then((res) => {
+                    setIsLoading(false);
+                    setData(res.data)
+                }).catch((err) => { console.error(err) });
+
+        }
+        if (isLoading) {
+
+            getData();
+        }
+
+
+    }, [isLoading])
+
+
+    if (isLoading) {
+        return (
+            <div className="Home">
+                Carregando
+            </div>
+        )
+    }
 
     return (
         <div className="Home">
@@ -27,7 +59,7 @@ export function Home() {
                 <h2>Módulos</h2>
                 <sub>Selecione o módulo para ver as aulas disponíveis:</sub>
                 <section className="modules">
-                    {data.map(module => <Module moduleName={module.module} totalClasses={module.classes.length} />)}
+                    {data?.map(module => <Module key={module.id} moduleName={module.module} totalClasses={module.classes.length} />)}
 
                 </section>
                 <section className="content">
