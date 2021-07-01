@@ -65,7 +65,7 @@ export function Home() {
                 <section className="content">
                     <h2>Module Name</h2>
                     <sub>Todas as aulas disponíveis nesse módulo:</sub>
-                    <Classes />
+                    <Classes module={data !== undefined ? data[2].module : ''} classes={data !== undefined ? data[2].classes : undefined} />
                 </section>
             </main>
         </div>
