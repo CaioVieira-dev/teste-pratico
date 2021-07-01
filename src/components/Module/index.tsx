@@ -1,11 +1,16 @@
 
 import './style.scss';
 
-export function Module() {
+type ModuleProps = {
+    moduleName: string;
+    totalClasses: number;
+}
+
+export function Module(props: ModuleProps) {
     return (
         <div className="Module">
-            <p>Module Name</p>
-            <span>Module total classes</span>
+            <p>{props.moduleName}</p>
+            <span>Aulas cadastradas {props.totalClasses}</span>
         </div>
     )
 }

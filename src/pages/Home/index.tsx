@@ -4,6 +4,17 @@ import { Classes } from '../../components/Classes'
 
 import './styles.scss'
 
+const data = [
+    {
+        module: "Introdução e Preparatório",
+        classes: [{
+            name: "Iniciando como um programador(a) Devaria",
+            date: "21/06 às 19:30"
+        }],
+    },
+
+]
+
 export function Home() {
 
     return (
@@ -16,11 +27,8 @@ export function Home() {
                 <h2>Módulos</h2>
                 <sub>Selecione o módulo para ver as aulas disponíveis:</sub>
                 <section className="modules">
-                    <Module />
-                    <Module />
-                    <Module />
-                    <Module />
-                    <Module />
+                    {data.map(module => <Module moduleName={module.module} totalClasses={module.classes.length} />)}
+
                 </section>
                 <section className="content">
                     <h2>Module Name</h2>
