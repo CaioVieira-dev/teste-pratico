@@ -161,6 +161,6 @@ const data = [
 
 module.exports = {
     getData(req, res) {
-        return res.send(data);
+        return res.send({ data, user: req.userId });
     }
 }

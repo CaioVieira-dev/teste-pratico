@@ -15,3 +15,5 @@ server.use(express.json());
 server.use(routes)
 
 server.listen(4000, () => console.log("rodando"));
+
+// pro secret do token, pegar um texto aleatorio e gerar um hash em cima dele, o id do usuario é parametro pra gera token
