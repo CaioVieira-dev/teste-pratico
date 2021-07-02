@@ -30,7 +30,7 @@ export function Classes(props: ClassesProps) {
     console.log(props.classes)
     return (
         <div className="classes">
-            {props.classes?.map((item) => <Class module={props.module} class={item} />)}
+            {props.classes?.map((item, index) => <Class key={`class_${index}`} module={props.module} class={item} />)}
         </div>
     )
 }

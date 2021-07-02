@@ -36,8 +36,6 @@ export function Home() {
 
             getData();
         }
-
-
     }, [isLoading])
 
 
