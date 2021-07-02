@@ -1,3 +1,4 @@
+import { useHistory } from 'react-router-dom'
 
 import { Module } from '../../components/Module'
 import { Classes } from '../../components/Classes'
@@ -21,15 +22,23 @@ type DataType = {
 export function Home() {
     const [isLoading, setIsLoading] = useState(true);
     const [data, setData] = useState<DataType>();
+    const history = useHistory();
 
     useEffect(() => {
 
         function getData() {
-            api.get('/api/modules-and-classes')
-                .then((res) => {
-                    setIsLoading(false);
-                    setData(res.data)
-                }).catch((err) => { console.error(err) });
+            if (localStorage.getItem("verzel_pratic_test_auth_token") === null) {
+                history.push('/login')
+            }
+            api.get('/api/modules-and-classes', {
+                headers: { "authorization": `Bearer ${localStorage.getItem("verzel_pratic_test_auth_token")}` }
+            }).then((res) => {
+                setIsLoading(false);
+                setData(res.data)
+            }).catch((err) => {
+                console.error(err)
+                history.push('/login')
+            });
 
         }
         if (isLoading) {

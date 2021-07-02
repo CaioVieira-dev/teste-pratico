@@ -33,6 +33,23 @@ module.exports = {
             role: user.role,
         }
     },
+    async findUserById(id) {
+        const db = await Database();
+        let user;
+        try {
+            user = await db.get(`SELECT * FROM users WHERE id = "${id}"`);
+        } catch (e) {
+            throw new Error(e)
+        }
+        if (user === undefined) { throw new Error("User not found") }
+
+        return {
+            id: user.id,
+            email: user.email,
+            password: user.password,
+            role: user.role,
+        }
+    },
 
     async createUser(newUser) {
 

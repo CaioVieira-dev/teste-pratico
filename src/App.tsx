@@ -2,6 +2,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom'
 
 import { Home } from './pages/Home'
 import { Login } from './pages/Login'
+import { Private } from './pages/private'
 
 function App() {
   return (
@@ -10,7 +11,7 @@ function App() {
 
         <Route path="/" exact component={Home} />
         <Route path="/login" exact component={Login} />
-
+        <Route path="/private" exact component={Private} />
       </Switch>
     </BrowserRouter>
 

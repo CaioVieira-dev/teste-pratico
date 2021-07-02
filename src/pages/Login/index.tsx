@@ -27,6 +27,7 @@ export function Login() {
         }
 
         console.log(result)
+        localStorage.setItem('verzel_pratic_test_auth_token', result.data.token)
         history.push('/')
 
     }

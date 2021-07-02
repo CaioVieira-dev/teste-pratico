@@ -64,6 +64,20 @@ module.exports = {
             user,
             token: generateToken({ id: user.id })
         });
+    },
+    async validateAuth(req, res) {
+        id = req.userId;
+
+        const user = await Users.findUserById(id);
+
+        if (user.role === 'admin') {
+            return res.status(200).send({ message: `Welcome admin ${user.email}` })
+        } else if (user.role === 'user') {
+            return res.status(401).send({ message: `Error, you do not have permission to access this page user ${user.email}` })
+        } else {
+            return res.status(500).send({ message: `Error, something went wrong. Please try again` })
+        }
+
     }
 
 }

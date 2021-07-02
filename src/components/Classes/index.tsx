@@ -27,7 +27,7 @@ function Class(props: ClassProps) {
 }
 
 export function Classes(props: ClassesProps) {
-    console.log(props.classes)
+
     return (
         <div className="classes">
             {props.classes?.map((item, index) => <Class key={`class_${index}`} module={props.module} class={item} />)}
