@@ -13,6 +13,11 @@ const initDb = {
         password TEXT,
         role TEXT
         )`)
+        await db.exec(`CREATE TABLE modules (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT,
+        classes TEXT)`)
+
         await db.close()
     }
 }

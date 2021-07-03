@@ -2,7 +2,23 @@
     max-width: 250px;
     width:100%;
     height: 112px;
+    padding:16px;
 
     border-radius:8px;
     border: 1px solid #ccc;
+    display: flex;
+    justify-content:space-between;
+    .config{
+        position: relative;
+
+        .abs{
+            visibility:hidden;
+            position: absolute;
+            top: 0;
+            right: 50px;
+        }
+        .vs{
+            visibility:visible;
+        }
+    }
 }

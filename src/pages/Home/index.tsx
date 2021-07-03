@@ -66,7 +66,12 @@ export function Home() {
                 <h2>Módulos</h2>
                 <sub>Selecione o módulo para ver as aulas disponíveis:</sub>
                 <section className="modules">
-                    {data?.map(module => <Module key={module.id} moduleName={module.module} totalClasses={module.classes.length} />)}
+                    {data?.map(module => <Module
+                        key={module.id}
+                        moduleName={module.module}
+                        totalClasses={module.classes.length}
+                        isAdmin={false}
+                    />)}
 
                 </section>
                 <section className="content">
