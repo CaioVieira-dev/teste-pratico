@@ -1,57 +1,41 @@
 
+
 import { useEffect, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { api } from '../../services/api'
+
 
 import { Module } from '../../components/Module'
 import { Classes } from '../../components/Classes'
 
 import { useModule } from '../../hooks/useModule'
+import { useAuth } from '../../hooks/useAuth'
 
 import './styles.scss'
 
 
-type DataType = {
-    id: number,
-    module: string,
-    classes: {
-        name: string,
-        date: string
-    }[]
-}[] | undefined
 
 export function Admin() {
-    const [isLoading, setIsLoading] = useState(true)
-    const [data, setData] = useState<DataType>();
-    const history = useHistory()
-    const { modules, currentModuleId } = useModule()
+
+    const history = useHistory();
+    const { modules, currentModuleId, isLoading } = useModule();
+    const [isAdminValidated, setIsAdminValidated] = useState(false);
+    const { validateAdmin } = useAuth();
 
     useEffect(() => {
-        function validateUser() {
+        function validateUserRole() {
             if (localStorage.getItem("verzel_pratic_test_auth_token") === null) {
                 history.push('/login')
             }
-
-            api.get('/api/private', {
-                headers: { "authorization": `Bearer ${localStorage.getItem("verzel_pratic_test_auth_token")}` }
-            }).then(response => {
-                api.get('/api/modules-and-classes', {
-                    headers: { "authorization": `Bearer ${localStorage.getItem("verzel_pratic_test_auth_token")}` }
-                }).then((res) => {
-                    setIsLoading(false);
-                    setData(res.data)
-                }).catch((err) => {
-                    console.error(err)
-                    history.push('/login')
-                });
-                setIsLoading(false)
-            }).catch(error => {
-                console.error(error.message)
+            try {
+                validateAdmin()
+                setIsAdminValidated(true);
+            } catch (error) {
+                console.log(error);
                 history.push('/login')
-            })
+            }
         }
-        if (isLoading) {
-            validateUser()
+        if (!isAdminValidated) {
+            validateUserRole()
         }
     }, [])
 
@@ -82,10 +66,10 @@ export function Admin() {
                     </div>
                 </div>
                 <section className="modules">
-                    {data?.map(module => <Module
+                    {modules?.map(module => <Module
                         key={module.id}
                         moduleId={module.id}
-                        moduleName={module.module}
+                        moduleName={module.name}
                         totalClasses={module.classes.length}
                         isAdmin={true} />)}
 

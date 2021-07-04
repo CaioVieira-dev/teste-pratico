@@ -11,9 +11,9 @@ routes.get('/api/modules-and-classes', ClassController.getModulesAndClasses)
 
 routes.put('/api/new-user', AuthController.newUser)
 
-routes.post('/api/auth', AuthController.auth)
+routes.post('/api/auth', AuthController.auth) //valida se está autenticado como usuario ou administrador
 
-routes.get('/api/private', authMiddleware, AuthController.validateAuth)
+routes.get('/api/validate-admin', authMiddleware, AuthController.validateAuth) //valida se está autenticado como administrador
 
 routes.post('/api/new-module', authMiddleware, ClassController.addModule)
 routes.post('/api/new-class', authMiddleware, ClassController.addClass)

@@ -3,6 +3,7 @@ import { api } from '../services/api';
 type AuthContextType = {
     login: (email: string, password: string) => void;
     getToken: () => string | null;
+    validateAdmin: () => Promise<void>;
 }
 
 type AuthContextProviderProps = {
@@ -36,11 +37,21 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
     function getToken() {
         return localStorage.getItem('verzel_pratic_test_auth_token')
     }
+    async function validateAdmin() {
+        try {
+            await api.get('/api/validate-admin', {
+                headers: { "authorization": `Bearer ${localStorage.getItem("verzel_pratic_test_auth_token")}` }
+            })
+        } catch (error) {
+            throw new Error(error)
+        }
+    }
 
     return (
         <AuthContext.Provider value={{
             getToken,
-            login
+            login,
+            validateAdmin
         }}>
             {props.children}
         </AuthContext.Provider>
