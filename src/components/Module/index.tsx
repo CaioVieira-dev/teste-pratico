@@ -1,15 +1,20 @@
 import cog from '../../assets/cog.svg'
 import './style.scss';
 
+import { useModule } from '../../hooks/useModule'
+
 type ModuleProps = {
+    moduleId: number;
     moduleName: string;
     totalClasses: number;
     isAdmin: boolean;
 }
 
 export function Module(props: ModuleProps) {
+    const { handleChangeModuleId } = useModule()
+
     return (
-        <div className="Module">
+        <div onClick={() => handleChangeModuleId(props.moduleId)} className="Module">
             <div className="data">
                 <p>{props.moduleName}</p>
                 <span>Aulas cadastradas {props.totalClasses}</span>

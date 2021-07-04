@@ -1,6 +1,7 @@
 import { FormEvent, useState } from 'react'
 import { useHistory } from 'react-router';
-import { api } from '../../services/api'
+
+import { useAuth } from '../../hooks/useAuth'
 
 import './styles.scss';
 
@@ -8,6 +9,7 @@ export function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const history = useHistory()
+    const { login } = useAuth();
 
     async function handleLogin(e: FormEvent) {
         e.preventDefault();
@@ -15,19 +17,9 @@ export function Login() {
             console.error('Error: Invalid email or password')
             return;
         }
-        let result;
-        try {
-            result = await api.post('/api/auth', {
-                email: email,
-                password: password,
-            })
-        } catch (error) {
-            console.error('Error: ', error)
-            return
-        }
 
-        console.log(result)
-        localStorage.setItem('verzel_pratic_test_auth_token', result.data.token)
+        login(email, password);
+
         history.push('/')
 
     }

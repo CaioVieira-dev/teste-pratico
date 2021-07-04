@@ -6,6 +6,8 @@ import { api } from '../../services/api'
 import { Module } from '../../components/Module'
 import { Classes } from '../../components/Classes'
 
+import { useModule } from '../../hooks/useModule'
+
 import './styles.scss'
 
 
@@ -22,6 +24,7 @@ export function Admin() {
     const [isLoading, setIsLoading] = useState(true)
     const [data, setData] = useState<DataType>();
     const history = useHistory()
+    const { modules, currentModuleId } = useModule()
 
     useEffect(() => {
         function validateUser() {
@@ -46,8 +49,6 @@ export function Admin() {
                 console.error(error.message)
                 history.push('/login')
             })
-
-
         }
         if (isLoading) {
             validateUser()
@@ -83,6 +84,7 @@ export function Admin() {
                 <section className="modules">
                     {data?.map(module => <Module
                         key={module.id}
+                        moduleId={module.id}
                         moduleName={module.module}
                         totalClasses={module.classes.length}
                         isAdmin={true} />)}
@@ -91,7 +93,9 @@ export function Admin() {
                 <section className="content">
                     <h2>Module Name</h2>
                     <sub>Todas as aulas disponíveis nesse módulo:</sub>
-                    <Classes module={data !== undefined ? data[2].module : ''} classes={data !== undefined ? data[2].classes : undefined} />
+                    <Classes
+                        module={modules !== undefined ? modules[modules.findIndex((module) => { return module.id === currentModuleId })].name : ''}
+                        classes={modules !== undefined ? modules[modules.findIndex((module) => { return module.id === currentModuleId })].classes : undefined} />
                 </section>
             </main>
         </div>
