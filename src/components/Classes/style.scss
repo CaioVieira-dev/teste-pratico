@@ -13,5 +13,28 @@
         background-color: #fafafa;
         border-radius: 16px;
         border:1px solid #ccc;
+        position: relative;
+        div[role="menubar"]{
+            visibility:hidden;
+            position: absolute;
+            top: 0;
+            right: 50px;
+        }
+        div[role="menubar"].visible{
+            visibility:visible;
+        }
+
+        .cogButton{
+            background-color:transparent;
+            border:0;
+            outline:0;
+        }
+        .edit{
+            visibility:hidden;
+            background-color:white;
+        }
+        .edit.visible{
+            visibility: visible;
+        }
     }
 }

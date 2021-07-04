@@ -10,6 +10,7 @@ import { Classes } from '../../components/Classes'
 import { useModule } from '../../hooks/useModule'
 import { useAuth } from '../../hooks/useAuth'
 
+
 import './styles.scss'
 
 
@@ -37,7 +38,9 @@ export function Admin() {
         if (!isAdminValidated) {
             validateUserRole()
         }
+
     }, [])
+
 
 
 
@@ -71,17 +74,24 @@ export function Admin() {
                         moduleId={module.id}
                         moduleName={module.name}
                         totalClasses={module.classes.length}
-                        isAdmin={true} />)}
+                        isAdmin={true}
+                    />)}
 
                 </section>
                 <section className="content">
                     <h2>Module Name</h2>
                     <sub>Todas as aulas disponíveis nesse módulo:</sub>
                     <Classes
+                        moduleId={modules !== undefined ? modules[modules.findIndex((module) => { return module.id === currentModuleId })].id : 0}
                         module={modules !== undefined ? modules[modules.findIndex((module) => { return module.id === currentModuleId })].name : ''}
-                        classes={modules !== undefined ? modules[modules.findIndex((module) => { return module.id === currentModuleId })].classes : undefined} />
+                        classes={modules !== undefined ? modules[modules.findIndex((module) => { return module.id === currentModuleId })].classes : undefined}
+                        isAdmin
+                    />
                 </section>
             </main>
+
+
+
         </div>
     )
 }

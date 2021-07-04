@@ -243,14 +243,12 @@ module.exports = {
             console.error(err)
             return res.status(500).send({ message: "Something went wrong. Please try again" })
         }
-
         if (userRole !== 'admin') {
             return res.status(403).send({ message: "Invalid request. You do not have permission to use this function" })
         }
 
 
         const { name, moduleId } = req.body;
-
         if (!name || !moduleId) {
             return res.status(400).send({ message: "Invalid request. Some of required data is missing." })
         }

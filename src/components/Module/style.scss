@@ -10,14 +10,29 @@
     justify-content:space-between;
     .config{
         position: relative;
+        .cogButton{
+            background-color: transparent;
+            border:0;
+            outline: 0;
+        }
 
-        .abs{
+        div[role="menubar"]{
             visibility:hidden;
             position: absolute;
             top: 0;
             right: 50px;
         }
-        .vs{
+        div[role="menubar"].visible{
+            visibility:visible;
+        }
+        .edit{
+            position: absolute;
+            right:0;
+            top:0;
+            background-color:white;
+            visibility:hidden;
+        }
+        .edit.visible{
             visibility:visible;
         }
     }

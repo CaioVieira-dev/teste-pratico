@@ -15,8 +15,8 @@ routes.post('/api/auth', AuthController.auth) //valida se está autenticado como
 
 routes.get('/api/validate-admin', authMiddleware, AuthController.validateAuth) //valida se está autenticado como administrador
 
-routes.post('/api/new-module', authMiddleware, ClassController.addModule)
-routes.post('/api/new-class', authMiddleware, ClassController.addClass)
+routes.put('/api/new-module', authMiddleware, ClassController.addModule)
+routes.put('/api/new-class', authMiddleware, ClassController.addClass)
 routes.post('/api/update-module', authMiddleware, ClassController.updateModule)
 routes.post('/api/update-class', authMiddleware, ClassController.updateClass)
 routes.delete('/api/delete-module', authMiddleware, ClassController.deleteModule)

@@ -1,7 +1,11 @@
 import cog from '../../assets/cog.svg'
 import './style.scss';
 
+
 import { useModule } from '../../hooks/useModule'
+import { useAuth } from '../../hooks/useAuth'
+import useDropdownMenu from 'react-accessible-dropdown-menu-hook';
+import { FormEvent, useEffect, useState } from 'react';
 
 type ModuleProps = {
     moduleId: number;
@@ -11,7 +15,32 @@ type ModuleProps = {
 }
 
 export function Module(props: ModuleProps) {
-    const { handleChangeModuleId } = useModule()
+    const { handleChangeModuleId, updateModule } = useModule()
+    const { getToken } = useAuth()
+    const { buttonProps, itemProps, isOpen, setIsOpen } = useDropdownMenu(2);
+    const [isEditing, setIsEditing] = useState(false)
+
+    const [updateField, setUpdateField] = useState(props.moduleName)
+
+    function handleKeydown(e: KeyboardEvent) {
+        if (e.key === "Escape") {
+            setIsEditing(false)
+        }
+    }
+    useEffect(() => {
+        document.addEventListener("keydown", handleKeydown);
+        return () => { document.removeEventListener("keydown", handleKeydown); }
+    })
+    async function handleUpdateModule(e: FormEvent) {
+        e.preventDefault();
+        if (updateField === '') {
+            return;
+        }
+        const token = getToken() || '';
+        await updateModule({ name: updateField, moduleId: props.moduleId }, token)
+
+        window.location.reload()
+    }
 
     return (
         <div onClick={() => handleChangeModuleId(props.moduleId)} className="Module">
@@ -21,10 +50,18 @@ export function Module(props: ModuleProps) {
             </div>
             {props.isAdmin &&
                 <div className="config">
-                    <img src={cog} alt="Configurações" />
-                    <div className="abs">
-                        <button>Editar</button>
-                        <button>Deletar</button>
+                    <button className="cogButton" onClick={() => setIsOpen(true)} {...buttonProps} ><img src={cog} alt="Configurações" /></button>
+                    <div className={isOpen ? "visible" : ""} role="menubar">
+                        <button onClick={() => setIsEditing(true)}><a {...itemProps[0]}>Editar</a></button>
+                        <button ><a {...itemProps[1]}>Deletar</a></button>
+                        <div className={isEditing ? 'edit visible' : "edit"}>
+                            <h3>Editar modulo {props.moduleName}</h3>
+                            <form onSubmit={(e) => handleUpdateModule(e)}>
+                                <input onChange={(e) => setUpdateField(e.target.value)} type="text" name="editModuleName" value={updateField} />
+                                <button className='cancel'>Cancelar</button>
+                                <button type="submit" className='save'>Salvar</button>
+                            </form>
+                        </div>
                     </div>
                 </div>}
         </div>
