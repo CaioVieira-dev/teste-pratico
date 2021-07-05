@@ -20,6 +20,10 @@ type ModuleContextType = {
     currentModuleId: number;
     updateModule: (updatedModule: { name: string, moduleId: number }, token: string) => Promise<void>;
     updateClass: (updatedClass: { id: number, name: string, date: string }, moduleId: number, token: string) => Promise<void>;
+    addModule: (moduleName: string, token: string) => Promise<void>;
+    addClass: (classData: { name: string, date: string }, moduleId: number, token: string) => Promise<void>;
+    deleteModule: (moduleId: number, token: string) => Promise<void>;
+    deleteClass: (classId: number, moduleId: number, token: string) => Promise<void>;
 }
 
 type ModuleContextProviderProps = {
@@ -67,6 +71,55 @@ export function ModuleContextProvider(props: ModuleContextProviderProps) {
         }
     }
 
+    async function addModule(moduleName: string, token: string) {
+        try {
+            await api.put('/api/new-module', {
+                "name": moduleName
+            }, {
+                headers: { "authorization": `Bearer ${token}` }
+            })
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    async function addClass(classData: { name: string, date: string }, moduleId: number, token: string) {
+        try {
+            await api.put('/api/new-class', {
+                "classData": { "name": `${classData.name}`, "date": `${classData.date}` },
+                "moduleId": moduleId
+            }, {
+                headers: { "authorization": `Bearer ${token}` }
+            })
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    async function deleteModule(moduleId: number, token: string) {
+
+        try {
+            await api.delete('/api/delete-module', {
+                headers: { "authorization": `Bearer ${token}` },
+                data: { "moduleId": moduleId }
+            })
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    async function deleteClass(classId: number, moduleId: number, token: string) {
+        try {
+            await api.delete('/api/delete-class', {
+                headers: { "authorization": `Bearer ${token}` },
+                data: {
+                    "moduleId": moduleId,
+                    "id": classId
+                }
+            })
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+
     useEffect(() => {
         function getModules() {
             api.get('/api/modules-and-classes').then((res) => {
@@ -90,7 +143,11 @@ export function ModuleContextProvider(props: ModuleContextProviderProps) {
             handleChangeModuleId,
             currentModuleId,
             updateModule,
-            updateClass
+            updateClass,
+            addModule,
+            addClass,
+            deleteModule,
+            deleteClass
         }}>
             {props.children}
         </ModuleContext.Provider>

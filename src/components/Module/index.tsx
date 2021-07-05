@@ -15,7 +15,7 @@ type ModuleProps = {
 }
 
 export function Module(props: ModuleProps) {
-    const { handleChangeModuleId, updateModule } = useModule()
+    const { handleChangeModuleId, updateModule, deleteModule } = useModule()
     const { getToken } = useAuth()
     const { buttonProps, itemProps, isOpen, setIsOpen } = useDropdownMenu(2);
     const [isEditing, setIsEditing] = useState(false)
@@ -42,6 +42,16 @@ export function Module(props: ModuleProps) {
         window.location.reload()
     }
 
+    async function handleDeleteModule() {
+        const token = getToken() || '';
+        try {
+            await deleteModule(props.moduleId, token)
+        } catch (error) {
+            console.error(error)
+        }
+        window.location.reload()
+    }
+
     return (
         <div onClick={() => handleChangeModuleId(props.moduleId)} className="Module">
             <div className="data">
@@ -53,7 +63,7 @@ export function Module(props: ModuleProps) {
                     <button className="cogButton" onClick={() => setIsOpen(true)} {...buttonProps} ><img src={cog} alt="Configurações" /></button>
                     <div className={isOpen ? "visible" : ""} role="menubar">
                         <button onClick={() => setIsEditing(true)}><a {...itemProps[0]}>Editar</a></button>
-                        <button ><a {...itemProps[1]}>Deletar</a></button>
+                        <button onClick={handleDeleteModule} ><a {...itemProps[1]}>Deletar</a></button>
                         <div className={isEditing ? 'edit visible' : "edit"}>
                             <h3>Editar modulo {props.moduleName}</h3>
                             <form onSubmit={(e) => handleUpdateModule(e)}>

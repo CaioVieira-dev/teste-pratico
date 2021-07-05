@@ -202,6 +202,7 @@ module.exports = {
         return res.status(201).send({ message: "New module added successfully" })
     },
     async addClass(req, res) {
+
         let userRole;
         try {
             userRole = await validateUserRole(req.userId)
@@ -216,12 +217,14 @@ module.exports = {
 
         let { classData, moduleId } = req.body;
 
+
         if (!classData ||
             !moduleId ||
             !classData.name ||
             !classData.date) {
             return res.status(400).send({ message: "Invalid request. Some of required data is missing." })
         }
+
 
 
         classData.id = await Module.getNextClassId(moduleId);

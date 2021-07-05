@@ -17,6 +17,7 @@ type ClassProps = {
         id: number;
     },
     toggleEditClass?: (id: number) => void;
+    isAdmin?: boolean;
 }
 type ClassesProps = {
     moduleId?: number;
@@ -31,7 +32,7 @@ type ClassesProps = {
 function Class(props: ClassProps) {
     const [updateName, setUpdateName] = useState(props.class.name)
     const [updateDate, setUpdateDate] = useState(props.class.date)
-    const { updateClass } = useModule();
+    const { updateClass, deleteClass } = useModule();
     const { getToken } = useAuth()
     const { buttonProps, itemProps, isOpen, setIsOpen } = useDropdownMenu(2);
     const [isEditing, setIsEditing] = useState(false)
@@ -64,30 +65,44 @@ function Class(props: ClassProps) {
         document.addEventListener("keydown", handleKeydown);
         return () => { document.removeEventListener("keydown", handleKeydown); }
     })
+    async function handleDeleteClass() {
+        const token = getToken() || '';
+        try {
+            await deleteClass(props.class.id, props.moduleId || 0, token)
+        } catch (error) {
+            console.error(error);
+        }
+        window.location.reload()
+    }
 
     return (
         <div className="class">
             <h5>{props.class.name}</h5>
             <p>{props.module}</p>
             <span>{props.class.date}</span>
-            <button
-                className="cogButton"
-                onClick={() => setIsOpen(true)} {...buttonProps} ><img src={cog} alt="Configurações" /></button>
-            <div className={isOpen ? "visible" : ""} role="menubar">
-                <button onClick={() => setIsEditing(true)}><a {...itemProps[0]}>Editar</a></button>
-                <button ><a {...itemProps[1]}>Deletar</a></button>
-                <div className={isEditing ? 'edit visible' : "edit"}>
-                    <h3>Editar aula {props.class.name}</h3>
-                    <form onSubmit={handleSubmit}>
-                        <label htmlFor="name">Nome:</label>
-                        <input onChange={e => setUpdateName(e.target.value)} type="text" name="name" value={updateName} />
-                        <label htmlFor="date">Data e hora em que acontecerá:</label>
-                        <input onChange={e => setUpdateDate(e.target.value)} type="text" name="date" value={updateDate} />
-                        <button className='cancel'>Cancelar</button>
-                        <button type="submit" className='save'>Salvar</button>
-                    </form>
-                </div>
-            </div>
+            {props.isAdmin &&
+                <>
+                    <button
+                        className="cogButton"
+                        onClick={() => setIsOpen(true)} {...buttonProps} ><img src={cog} alt="Configurações" /></button>
+                    <div className={isOpen ? "visible" : ""} role="menubar">
+                        <button onClick={() => setIsEditing(true)}><a {...itemProps[0]}>Editar</a></button>
+                        <button onClick={handleDeleteClass} ><a {...itemProps[1]}>Deletar</a></button>
+                        <div className={isEditing ? 'edit visible' : "edit"}>
+                            <h3>Editar aula {props.class.name}</h3>
+                            <form onSubmit={handleSubmit}>
+                                <label htmlFor="name">Nome:</label>
+                                <input onChange={e => setUpdateName(e.target.value)} type="text" name="name" value={updateName} />
+                                <label htmlFor="date">Data e hora em que acontecerá:</label>
+                                <input onChange={e => setUpdateDate(e.target.value)} type="text" name="date" value={updateDate} />
+                                <button className='cancel'>Cancelar</button>
+                                <button type="submit" className='save'>Salvar</button>
+                            </form>
+                        </div>
+                    </div>
+                </>
+            }
+
         </div>
     )
 }
@@ -101,6 +116,7 @@ export function Classes(props: ClassesProps) {
                 module={props.module}
                 class={item}
                 moduleId={props.moduleId}
+                isAdmin={props.isAdmin}
             />)}
         </div>
     )

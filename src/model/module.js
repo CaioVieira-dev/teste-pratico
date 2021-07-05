@@ -137,6 +137,7 @@ module.exports = {
         })
     },
     async getNextClassId(moduleId) {
+
         const db = await Database();
         let classes;
         try {
@@ -149,6 +150,7 @@ module.exports = {
 
             }
             classes = JSON.parse(currentClasses.classes);
+
         } catch (error) {
             // console.error(error)
             await db.close()
@@ -156,6 +158,8 @@ module.exports = {
         }
         await db.close();
 
-        return classes[classes.length - 1].id + 1;
+        const result = classes.length !== 0 ? classes[classes.length - 1].id + 1 : 1;
+
+        return result;
     }
 }

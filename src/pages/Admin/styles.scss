@@ -5,7 +5,7 @@
     top: 0;
     left: 50%;
     transform: translateX(-50%);
-padding:0 2%;
+    padding:0 2%;
     header{
         margin-top:24px;
         display: flex;
@@ -30,6 +30,45 @@ padding:0 2%;
                     &+button{
                         margin-left: 16px;
                     }
+                }
+                div[role="form"]{
+                    visibility:hidden;
+                    position: absolute;
+                    top: 16px;
+                    right: 16px;
+                    left: 16px;
+                    bottom: 16px;
+                    background-color: #fafafa;
+                    z-index: 10;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: start;
+                    align-items: center;
+                    padding: 16px;
+                    form{
+                        display: flex;
+                        flex-direction: column;
+                        align-items:center;
+                        max-width:500px;
+                        width:100%;
+                        justify-content: center;
+                        label, select,input{
+                            width:100%;
+                            margin-top:8px;
+                        }
+                        .buttons{
+                            margin-top:16px;
+                            display: flex;
+                            gap: 16px;
+                            width: 100%;
+                            button{
+                                width:100%;
+                            }
+                        }
+                    }
+                }
+                div[role="form"].visible{
+                    visibility:visible;
                 }
             }
 
