@@ -1,9 +1,9 @@
-import { Link } from 'react-router-dom'
+
 import { Module } from '../../components/Module'
 import { Classes } from '../../components/Classes'
 
 import './styles.scss'
-
+import { Header } from '../../components/Header'
 
 import { useModule } from '../../hooks/useModule'
 
@@ -22,10 +22,7 @@ export function Home() {
 
     return (
         <div className="Home">
-            <header>
-                <h3>Logo</h3>
-                <span><Link to={'/login'}>Login</Link></span>
-            </header>
+            <Header />
             <main>
                 <h2>Módulos</h2>
                 <sub>Selecione o módulo para ver as aulas disponíveis:</sub>

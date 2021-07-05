@@ -35,18 +35,26 @@ function Class(props: ClassProps) {
     const { updateClass, deleteClass } = useModule();
     const { getToken } = useAuth()
     const { buttonProps, itemProps, isOpen, setIsOpen } = useDropdownMenu(2);
-    const [isEditing, setIsEditing] = useState(false)
+    const [isEditing, setIsEditing] = useState(false);
 
     async function handleSubmit(e: FormEvent) {
         e.preventDefault();
+
         if (!updateName || !updateDate) {
             return;
         }
+
+        const day = updateDate.substr(8, 2)
+        const month = updateDate.substr(5, 2)
+        const year = updateDate.substr(0, 4)
+        const time = updateDate.substr(11)
+        let date = `${day}/${month}/${year} às ${time}`;
+
         const token = getToken() || '';
         await updateClass({
             id: props.class.id,
             name: updateName,
-            date: updateDate
+            date: date
         },
             props.moduleId || 0,
             token)
@@ -77,27 +85,33 @@ function Class(props: ClassProps) {
 
     return (
         <div className="class">
-            <h5>{props.class.name}</h5>
-            <p>{props.module}</p>
-            <span>{props.class.date}</span>
+            <div className="info">
+                <h5>{props.class.name}</h5>
+                <p>{props.module}</p>
+                <span>{props.class.date}</span>
+            </div>
             {props.isAdmin &&
                 <>
-                    <button
-                        className="cogButton"
-                        onClick={() => setIsOpen(true)} {...buttonProps} ><img src={cog} alt="Configurações" /></button>
-                    <div className={isOpen ? "visible" : ""} role="menubar">
-                        <button onClick={() => setIsEditing(true)}><a {...itemProps[0]}>Editar</a></button>
-                        <button onClick={handleDeleteClass} ><a {...itemProps[1]}>Deletar</a></button>
-                        <div className={isEditing ? 'edit visible' : "edit"}>
-                            <h3>Editar aula {props.class.name}</h3>
-                            <form onSubmit={handleSubmit}>
-                                <label htmlFor="name">Nome:</label>
-                                <input onChange={e => setUpdateName(e.target.value)} type="text" name="name" value={updateName} />
-                                <label htmlFor="date">Data e hora em que acontecerá:</label>
-                                <input onChange={e => setUpdateDate(e.target.value)} type="text" name="date" value={updateDate} />
-                                <button className='cancel'>Cancelar</button>
-                                <button type="submit" className='save'>Salvar</button>
-                            </form>
+                    <div className="config">
+                        <button
+                            className="cogButton"
+                            onClick={() => setIsOpen(true)} {...buttonProps} ><img src={cog} alt="Configurações" /></button>
+                        <div className={isOpen ? "visible" : ""} role="menubar">
+                            <button onClick={() => setIsEditing(true)}><a {...itemProps[0]}>Editar</a></button>
+                            <button onClick={handleDeleteClass} ><a {...itemProps[1]}>Deletar</a></button>
+                            <div className={isEditing ? 'edit visible' : "edit"}>
+                                <h3>Editar aula {props.class.name}</h3>
+                                <form onSubmit={handleSubmit}>
+                                    <label htmlFor="name">Nome:</label>
+                                    <input onChange={e => setUpdateName(e.target.value)} type="text" name="name" value={updateName} />
+                                    <label htmlFor="date">Data e hora em que acontecerá:</label>
+                                    <input onChange={e => setUpdateDate(e.target.value)} type="datetime-local" name="date" value={updateDate} />
+                                    <div className="buttons">
+                                        <button className='cancel'>Cancelar</button>
+                                        <button type="submit" className='save'>Salvar</button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </>

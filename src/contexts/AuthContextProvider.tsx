@@ -1,9 +1,11 @@
 import { useState, createContext, ReactNode, useEffect } from 'react'
 import { api } from '../services/api';
 type AuthContextType = {
-    login: (email: string, password: string) => void;
+    login: (email: string, password: string) => Promise<{ id: number, email: string, role: string }>;
     getToken: () => string | null;
     validateAdmin: () => Promise<void>;
+    registerUser: (email: string, password: string) => Promise<{ id: number, email: string, role: string }>
+    registerAdmin: (email: string, password: string, token: string) => Promise<{ id: number, email: string, role: string }>
 }
 
 type AuthContextProviderProps = {
@@ -26,14 +28,51 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
                 password: password,
             })
         } catch (error) {
-            console.error('Error: ', error)
-            return
+            console.error('Error: ', error);
+            return;
         }
 
-        console.log(result)
-        localStorage.setItem('verzel_pratic_test_auth_token', result.data.token)
 
+        localStorage.setItem('verzel_pratic_test_auth_token', result.data.token)
+        return result.data.user
     }
+    async function registerUser(email: string, password: string) {
+        if (!email || !password) {
+            return;
+        }
+        let result;
+        try {
+            result = await api.put('/api/new-user', {
+                "email": email,
+                "password": password
+            })
+        } catch (error) {
+            console.log(error)
+            return;
+        }
+        localStorage.setItem('verzel_pratic_test_auth_token', result.data.token)
+        return result?.data.user
+    }
+    async function registerAdmin(email: string, password: string, token: string) {
+        if (!email || !password || !token) {
+            return;
+        }
+        let result;
+        try {
+            result = await api.put('/api/new-admin', {
+                "email": email,
+                "password": password
+            }, {
+                headers: { "authorization": `Bearer ${token}` }
+            })
+        } catch (error) {
+            console.log(error)
+            return;
+        }
+        localStorage.setItem('verzel_pratic_test_auth_token', result.data.token)
+        return result?.data.user
+    }
+
     function getToken() {
         return localStorage.getItem('verzel_pratic_test_auth_token')
     }
@@ -51,7 +90,9 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
         <AuthContext.Provider value={{
             getToken,
             login,
-            validateAdmin
+            validateAdmin,
+            registerUser,
+            registerAdmin
         }}>
             {props.children}
         </AuthContext.Provider>

@@ -6,6 +6,7 @@ import { useHistory } from 'react-router-dom'
 
 import { Module } from '../../components/Module'
 import { Classes } from '../../components/Classes'
+import { Header } from '../../components/Header'
 
 import { useModule } from '../../hooks/useModule'
 import { useAuth } from '../../hooks/useAuth'
@@ -47,9 +48,16 @@ function AddClass(props: AddClassProps) {
 
         e.preventDefault();
         if (!moduleField || !classNameField || !classDateField) { return }
+
+        const day = classDateField.substr(8, 2)
+        const month = classDateField.substr(5, 2)
+        const year = classDateField.substr(0, 4)
+        const time = classDateField.substr(11)
+        let date = `${day}/${month}/${year} às ${time}`;
+
         const token = getToken() || '';
         try {
-            await addClass({ name: classNameField, date: classDateField }, moduleField, token)
+            await addClass({ name: classNameField, date: date }, moduleField, token)
         } catch (error) {
             console.error(error)
         }
@@ -86,7 +94,7 @@ function AddClass(props: AddClassProps) {
                     />
                     <label htmlFor="date">Data e hora da aula</label>
                     <input
-                        type="text"
+                        type="datetime-local"
                         name="date"
                         onChange={(e) => setClassDateField(e.target.value)}
                         required
@@ -202,10 +210,7 @@ export function Admin() {
 
     return (
         <div className="Admin">
-            <header>
-                <h3>Logo</h3>
-                <span>Login</span>
-            </header>
+            <Header />
             <main>
                 <div className="wrapper">
                     <div className="text">
@@ -230,7 +235,7 @@ export function Admin() {
 
                 </section>
                 <section className="content">
-                    <h2>Module Name</h2>
+                    <h2>{modules !== undefined ? modules[modules.findIndex((module) => { return module.id === currentModuleId })].name : ''}</h2>
                     <sub>Todas as aulas disponíveis nesse módulo:</sub>
                     <Classes
                         moduleId={modules !== undefined ? modules[modules.findIndex((module) => { return module.id === currentModuleId })].id : 0}

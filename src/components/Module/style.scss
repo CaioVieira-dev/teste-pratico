@@ -5,32 +5,98 @@
     padding:16px;
 
     border-radius:8px;
-    border: 1px solid #ccc;
+    background-color:#A19FFF;
     display: flex;
     justify-content:space-between;
+
+    margin-top: 16px;
+    transition: filter 0.3s;
+
+    cursor:pointer;
+
+    &:hover{
+        filter:brightness(0.9)
+    }
+    p,span{
+        color:#fafafa;
+    }
+
     .config{
         position: relative;
         .cogButton{
             background-color: transparent;
             border:0;
             outline: 0;
+            cursor: pointer;
+            filter: invert(99%) sepia(56%) saturate(16%) hue-rotate(259deg) brightness(108%) contrast(96%);
+            &:hover{
+                filter: invert(99%) sepia(56%) saturate(16%) hue-rotate(259deg) brightness(90%) contrast(96%);
+            }
         }
 
         div[role="menubar"]{
             visibility:hidden;
             position: absolute;
-            top: 0;
-            right: 50px;
+            top: 4px;
+            right: -70px;
+            display:flex;
+            flex-direction: column;
+            >button{
+                width:100px;
+                padding:8px 12px;
+                cursor: pointer;
+                border:0;
+                &:hover{
+                    filter:brightness(0.9);
+                }
+                &:first-of-type{
+                    border-radius: 8px 8px 0 0;
+                }
+                &:last-of-type{
+                    border-radius:0 0 8px 8px;
+                }
+            }
         }
         div[role="menubar"].visible{
             visibility:visible;
         }
         .edit{
-            position: absolute;
-            right:0;
-            top:0;
-            background-color:white;
+            position: relative;
+            left:-110px;
+            top:-82px;
+            width: 100%;
+            height: 100%;
+            background-color:#A19FFF;
             visibility:hidden;
+            padding:16px;
+            border-radius: 16px;
+
+            h3{
+                color:#fafafa;
+            }
+            form{
+                margin-top: 8px;
+                input{
+                    height:24px;
+                    border-radius: 8px;
+                    border:0;
+                    padding-left: 8px;
+                }
+                .buttons{
+                    display: flex;
+                    width: 100%;
+                    gap:16px;
+                    margin-top: 8px;
+                    button{
+                        width:100%;
+                        padding:4px 6px;
+                        border-radius: 8px;
+                        background-color: #fafafa;
+                        border:0;
+                        color:#A19FFF;
+                    }
+                }
+            }
         }
         .edit.visible{
             visibility:visible;

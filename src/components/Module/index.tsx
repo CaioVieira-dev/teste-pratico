@@ -68,8 +68,10 @@ export function Module(props: ModuleProps) {
                             <h3>Editar modulo {props.moduleName}</h3>
                             <form onSubmit={(e) => handleUpdateModule(e)}>
                                 <input onChange={(e) => setUpdateField(e.target.value)} type="text" name="editModuleName" value={updateField} />
-                                <button className='cancel'>Cancelar</button>
-                                <button type="submit" className='save'>Salvar</button>
+                                <div className="buttons">
+                                    <button className='cancel'>Cancelar</button>
+                                    <button type="submit" className='save'>Salvar</button>
+                                </div>
                             </form>
                         </div>
                     </div>

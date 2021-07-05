@@ -10,6 +10,7 @@ const AuthController = require("./controllers/AuthController.js")
 routes.get('/api/modules-and-classes', ClassController.getModulesAndClasses)
 
 routes.put('/api/new-user', AuthController.newUser)
+routes.put('/api/new-admin', authMiddleware, AuthController.newAdmin)
 
 routes.post('/api/auth', AuthController.auth) //valida se está autenticado como usuario ou administrador
 

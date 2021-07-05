@@ -1,0 +1,23 @@
+header{
+    margin-top:24px;
+    display: flex;
+    justify-content:space-between;
+    width:100%;
+
+    color:#fafafa;
+    display: flex;
+    align-items:center;
+    justify-content:space-between;
+    h3{
+        font-size: 24px;
+    }
+    a{
+        text-decoration:none;
+        color:#fafafa;
+        cursor: pointer;
+        &:hover{
+            filter:brightness(0.9);
+            text-decoration:underline;
+        }
+    }
+}

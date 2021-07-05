@@ -5,13 +5,17 @@
     align-items: center;
     justify-content: center;
 
+
     .container{
         display: flex;
         flex-direction:column;
         width:100%;
         max-width: 400px;
-        height:500px;
-
+        height:400px;
+        background-color:#A19FFF;
+        padding:16px;
+        border-radius: 16px;
+        color:#fafafa;
         h2{
             font-size: 48px;
             align-self: center;
@@ -29,14 +33,17 @@
                 height:36px;
                 padding-left: 8px;
                 border-radius: 8px;
+                border:0;
             }
             button{
-                height:36px;
                 border-radius: 8px;
                 margin-top:16px;
+                border:0;
                 
                 cursor:pointer;
-
+                color:#A19FFF;
+                background-color:#fafafa;
+                padding: 8px 12px;
                 transition: filter 0.3s;
                 &:hover{
                     filter:brightness(0.9);
