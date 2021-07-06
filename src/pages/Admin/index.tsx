@@ -65,7 +65,7 @@ function AddClass(props: AddClassProps) {
         const year = classDateField.substr(0, 4)
         const time = classDateField.substr(11)
         let date = `${day}/${month}/${year} às ${time}`;
-        console.log(date, classNameField, moduleField)
+
         const token = getToken() || '';
         try {
             await addClass({ name: classNameField, date: date }, moduleField, token)
@@ -341,7 +341,7 @@ export function Admin() {
                 validateAdmin()
                 setIsAdminValidated(true);
             } catch (error) {
-                console.log(error);
+                console.error(error);
                 history.push('/login')
             }
         }
