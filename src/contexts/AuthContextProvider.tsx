@@ -1,4 +1,4 @@
-import { useState, createContext, ReactNode, useEffect } from 'react'
+import { createContext, ReactNode } from 'react'
 import { api } from '../services/api';
 type AuthContextType = {
     login: (email: string, password: string) => Promise<{ id: number, email: string, role: string }>;

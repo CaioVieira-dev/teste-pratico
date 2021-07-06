@@ -5,6 +5,8 @@ import './style.scss';
 import { useModule } from '../../hooks/useModule'
 import { useAuth } from '../../hooks/useAuth'
 import useDropdownMenu from 'react-accessible-dropdown-menu-hook';
+import { toast } from 'react-toastify';
+
 import { FormEvent, useEffect, useState } from 'react';
 
 type ModuleProps = {
@@ -15,7 +17,7 @@ type ModuleProps = {
 }
 
 export function Module(props: ModuleProps) {
-    const { handleChangeModuleId, updateModule, deleteModule } = useModule()
+    const { handleChangeModuleId, updateModule, deleteModule, refreshModules, currentModuleId } = useModule()
     const { getToken } = useAuth()
     const { buttonProps, itemProps, isOpen, setIsOpen } = useDropdownMenu(2);
     const [isEditing, setIsEditing] = useState(false)
@@ -37,9 +39,33 @@ export function Module(props: ModuleProps) {
             return;
         }
         const token = getToken() || '';
-        await updateModule({ name: updateField, moduleId: props.moduleId }, token)
+        try {
 
-        window.location.reload()
+            await updateModule({ name: updateField, moduleId: props.moduleId }, token)
+        } catch (error) {
+            console.error(error);
+            toast.error('Alguma coisa deu errado. Tente novamente', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+            return;
+        }
+        refreshModules()
+        setIsEditing(false)
+        toast.success('Módulo atualizado com sucesso', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
     }
 
     async function handleDeleteModule() {
@@ -48,12 +74,32 @@ export function Module(props: ModuleProps) {
             await deleteModule(props.moduleId, token)
         } catch (error) {
             console.error(error)
+            toast.error('Alguma coisa deu errado. Tente novamente', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+            return;
         }
-        window.location.reload()
+        refreshModules()
+        toast.success('Módulo deletado com sucesso', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+
     }
 
     return (
-        <div onClick={() => handleChangeModuleId(props.moduleId)} className="Module">
+        <div onClick={() => handleChangeModuleId(props.moduleId)} className={props.moduleId === currentModuleId ? "Module selected" : "Module"}>
             <div className="data">
                 <p>{props.moduleName}</p>
                 <span>Aulas cadastradas {props.totalClasses}</span>
@@ -69,7 +115,11 @@ export function Module(props: ModuleProps) {
                             <form onSubmit={(e) => handleUpdateModule(e)}>
                                 <input onChange={(e) => setUpdateField(e.target.value)} type="text" name="editModuleName" value={updateField} />
                                 <div className="buttons">
-                                    <button className='cancel'>Cancelar</button>
+                                    <button className='cancel'
+                                        type="button"
+                                        onClick={() => {
+                                            setIsEditing(false)
+                                        }} >Cancelar</button>
                                     <button type="submit" className='save'>Salvar</button>
                                 </div>
                             </form>

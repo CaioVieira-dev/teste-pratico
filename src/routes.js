@@ -6,15 +6,15 @@ const authMiddleware = require("./middlewares/auth")
 const ClassController = require("./controllers/ClassController.js")
 const AuthController = require("./controllers/AuthController.js")
 
-//routes.get('/api/modules-and-classes/admin', authMiddleware, ClassController.getData)
+
 routes.get('/api/modules-and-classes', ClassController.getModulesAndClasses)
 
 routes.put('/api/new-user', AuthController.newUser)
 routes.put('/api/new-admin', authMiddleware, AuthController.newAdmin)
 
-routes.post('/api/auth', AuthController.auth) //valida se está autenticado como usuario ou administrador
+routes.post('/api/auth', AuthController.auth)
 
-routes.get('/api/validate-admin', authMiddleware, AuthController.validateAuth) //valida se está autenticado como administrador
+routes.get('/api/validate-admin', authMiddleware, AuthController.validateAuth)
 
 routes.put('/api/new-module', authMiddleware, ClassController.addModule)
 routes.put('/api/new-class', authMiddleware, ClassController.addClass)

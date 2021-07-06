@@ -24,6 +24,8 @@ type ModuleContextType = {
     addClass: (classData: { name: string, date: string }, moduleId: number, token: string) => Promise<void>;
     deleteModule: (moduleId: number, token: string) => Promise<void>;
     deleteClass: (classId: number, moduleId: number, token: string) => Promise<void>;
+    refreshModules: () => void;
+
 }
 
 type ModuleContextProviderProps = {
@@ -35,7 +37,7 @@ export const ModuleContext = createContext({} as ModuleContextType)
 export function ModuleContextProvider(props: ModuleContextProviderProps) {
     const [isLoading, setIsLoading] = useState(true);
     const [modules, setModules] = useState<ModulesType>();
-    const [currentModuleId, setCurrentModuleId] = useState(1);
+    const [currentModuleId, setCurrentModuleId] = useState<number>(1);
 
     async function updateModule(updatedModule: { name: string, moduleId: number }, token: string) {
         try {
@@ -119,13 +121,43 @@ export function ModuleContextProvider(props: ModuleContextProviderProps) {
         }
     }
 
+    function refreshModules() {
+        api.get('/api/modules-and-classes').then((res) => {
+            let ordenedData = res.data.sort((a: any, b: any) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : (b.name.toLowerCase() > a.name.toLowerCase()) ? -1 : 0);
+            ordenedData = ordenedData.map((item: any) => {
+                if (item.classes) {
+                    item.classes = item.classes.sort((a: any, b: any) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : (b.name.toLowerCase() > a.name.toLowerCase()) ? -1 : 0)
+                }
+                return item
+            })
+
+
+            setCurrentModuleId(ordenedData[0].id)
+            setModules(ordenedData)
+
+        }).catch((err) => {
+            console.error(err)
+        });
+    }
 
     useEffect(() => {
         function getModules() {
             api.get('/api/modules-and-classes').then((res) => {
                 setIsLoading(false);
-                setModules(res.data)
-                console.log(res.data)
+
+                let ordenedData = res.data.sort((a: any, b: any) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : (b.name.toLowerCase() > a.name.toLowerCase()) ? -1 : 0);
+
+                ordenedData = ordenedData.map((item: any) => {
+                    if (item.classes) {
+                        item.classes = item.classes.sort((a: any, b: any) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : (b.name.toLowerCase() > a.name.toLowerCase()) ? -1 : 0)
+                    }
+                    return item
+                })
+
+
+                setCurrentModuleId(ordenedData[0].id)
+                setModules(ordenedData)
+
             }).catch((err) => {
                 console.error(err)
             });
@@ -147,7 +179,8 @@ export function ModuleContextProvider(props: ModuleContextProviderProps) {
             addModule,
             addClass,
             deleteModule,
-            deleteClass
+            deleteClass,
+            refreshModules
         }}>
             {props.children}
         </ModuleContext.Provider>

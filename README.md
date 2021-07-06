@@ -1,46 +1,54 @@
-# Getting Started with Create React App
+# Teste pratico
+## Tecnologias utilizadas
+- ReactJS
+- ContextAPI
+- Typescript
+- Javascript
+- express
+- SQlite
+- SASS
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+### Como instalar (React)
 
-## Available Scripts
+* Para baixar o projeto siga as instruções abaixo:
 
-In the project directory, you can run:
+```
+1. git clone https://github.com/CaioVieira-dev/teste-pratico.git
+2. cd teste-pratico
+```
 
-### `yarn start`
+* Instale as dependências do projeto:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```
+3. yarn install
+ou
+3. npm install
+```
+* Inicie o servidor
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+```
+4. yarn run server
+ou
+4. npm run server
 
-### `yarn test`
+```
+* Inicie a aplicação
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```
+5. yarn start
+ou
+5. npm start
+```
 
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+# Sobre o projeto
+- As rotas desprotegidas são a '/' e '/login'
+- A rota protegida é a '/admin'
+- A pagina de login pode adicionar novos 'usuários'
+- A pagina de administrador pode adicionar novos 'administradores'
+- A pagina de administrador pode cadastrar, editar ou deletar aulas e módulos
+- Ambas as paginas das rotas '/' e '/admin' podem ver todas as aulas e módulos
+- Clicar no card de módulo revela as aulas cadastradas no mesmo
+- Como administrador, clicar em uma engrenagem mostra as opções de edição e deletar do módulo ou aula.
+- Um usuário administrador pré-cadastrado é *'admin@gmail.com'* senha *'123456'*
+- Toda requisição de alteração de módulo ou aula é protegida com uma verificação de token de autenticação e uma validação adicional no backend de função do usuário (administrador ou usuário)
+- A pagina utiliza o express no backend e o axios para lidar com as requisições. As rotas da api do backend estão no arquivo 'src/routes.js'

@@ -5,6 +5,7 @@ import { FormEvent, useEffect, useState } from 'react';
 import { useModule } from '../../hooks/useModule'
 import { useAuth } from '../../hooks/useAuth'
 import useDropdownMenu from 'react-accessible-dropdown-menu-hook';
+import { toast } from 'react-toastify';
 import './style.scss';
 
 
@@ -31,8 +32,19 @@ type ClassesProps = {
 }
 function Class(props: ClassProps) {
     const [updateName, setUpdateName] = useState(props.class.name)
-    const [updateDate, setUpdateDate] = useState(props.class.date)
-    const { updateClass, deleteClass } = useModule();
+    const [updateDate, setUpdateDate] = useState(() => {
+
+        let dbDate = props.class.date
+        const day = dbDate.substr(0, 2)
+        const month = dbDate.substr(3, 2)
+        const year = dbDate.substr(6, 4)
+        const time = dbDate.substr(14)
+        let date = `${year}-${month}-${day}T${time}`;
+
+        return date;
+
+    })
+    const { updateClass, deleteClass, refreshModules } = useModule();
     const { getToken } = useAuth()
     const { buttonProps, itemProps, isOpen, setIsOpen } = useDropdownMenu(2);
     const [isEditing, setIsEditing] = useState(false);
@@ -51,15 +63,40 @@ function Class(props: ClassProps) {
         let date = `${day}/${month}/${year} às ${time}`;
 
         const token = getToken() || '';
-        await updateClass({
-            id: props.class.id,
-            name: updateName,
-            date: date
-        },
-            props.moduleId || 0,
-            token)
+        try {
 
-        window.location.reload()
+            await updateClass({
+                id: props.class.id,
+                name: updateName,
+                date: date
+            },
+                props.moduleId || 0,
+                token)
+        } catch (error) {
+            console.error(error)
+            toast.error('Alguma coisa deu errado. Tente novamente', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+            return;
+        }
+
+        refreshModules();
+        setIsEditing(false);
+        toast.success('Aula atualizada com sucesso', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
 
     }
 
@@ -79,16 +116,36 @@ function Class(props: ClassProps) {
             await deleteClass(props.class.id, props.moduleId || 0, token)
         } catch (error) {
             console.error(error);
+            toast.error('Alguma coisa deu errado. Tente novamente', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+            return;
         }
-        window.location.reload()
+        refreshModules()
+        toast.success('Aula deletada com sucesso', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+        });
+
     }
 
     return (
         <div className="class">
             <div className="info">
                 <h5>{props.class.name}</h5>
-                <p>{props.module}</p>
-                <span>{props.class.date}</span>
+                <p>Módulo: {props.module}</p>
+                <span>Data da aula: {props.class.date}</span>
             </div>
             {props.isAdmin &&
                 <>
@@ -107,7 +164,11 @@ function Class(props: ClassProps) {
                                     <label htmlFor="date">Data e hora em que acontecerá:</label>
                                     <input onChange={e => setUpdateDate(e.target.value)} type="datetime-local" name="date" value={updateDate} />
                                     <div className="buttons">
-                                        <button className='cancel'>Cancelar</button>
+                                        <button
+                                            type="button"
+                                            className='cancel'
+                                            onClick={() => setIsEditing(false)}
+                                        >Cancelar</button>
                                         <button type="submit" className='save'>Salvar</button>
                                     </div>
                                 </form>
