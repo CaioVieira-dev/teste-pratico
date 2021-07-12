@@ -1,10 +1,10 @@
 const express = require("express");
 const routes = express.Router();
-const authMiddleware = require("./middlewares/auth")
+const authMiddleware = require("./backend/middlewares/auth")
 
 
-const ClassController = require("./controllers/ClassController.js")
-const AuthController = require("./controllers/AuthController.js")
+const ClassController = require("./backend/controllers/ClassController.js")
+const AuthController = require("./backend/controllers/AuthController.js")
 
 
 routes.get('/api/modules-and-classes', ClassController.getModulesAndClasses)

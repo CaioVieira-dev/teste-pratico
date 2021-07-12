@@ -1,11 +1,11 @@
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 
-import { Home } from './pages/Home'
-import { Login } from './pages/Login'
+import { Home } from './frontend/pages/Home'
+import { Login } from './frontend/pages/Login'
 
-import { Admin } from './pages/Admin'
-import { ModuleContextProvider } from './contexts/ModuleContextProvider'
-import { AuthContextProvider } from './contexts/AuthContextProvider'
+import { Admin } from './frontend/pages/Admin'
+import { ModuleContextProvider } from './frontend/contexts/ModuleContextProvider'
+import { AuthContextProvider } from './frontend/contexts/AuthContextProvider'
 
 function App() {
   return (
